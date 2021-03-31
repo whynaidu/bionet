@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+</head>
+<body>
+
+<div class="container" ng-app="myapp">
+	<h1>Login Form</h1>
+	<form ng-controller="loginctrl" ng-submit="login()">
+		<div class="form-group">
+			<input type="text" name="" class="form-control" placeholder="username" ng-model="logindata.uname">
+		</div>
+		<div class="form-group">
+			<input type="password" name="" class="form-control" placeholder="password" ng-model="logindata.passwd">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary">Login</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="../vendor/app.js"></script>
+	
+<script type="text/javascript">
+	
+	
+
+	app.controller('loginctrl', function($scope, $http){
+
+		if(localStorage.length>0){
+
+			window.location.href = "<%= usefuls.url.viewUrl %>/myprofile";			
+
+		}
+
+		$scope.login = function(){
+
+			console.log($scope.logindata);
+			$http({
+				url:"<%= usefuls.url.apiUrl %>/login",
+				method:"POST",
+				data:$scope.logindata,
+				headers:{"Content-Type":"application/json"}
+			}).then(function successCallback(res){
+				localStorage.setItem("id", res.data[0]._id);
+				localStorage.setItem("uname", res.data[0].username);
+				location.reload();
+				// localStorage.clear();
+				// console.log(localStorage);
+			}, function errorCallback(err){
+				console.log(err);
+			});
+
+		}
+
+	});
+
+</script>
+
+</body>
+</html>
