@@ -14,10 +14,22 @@
 	<div ng-app="myapp">
 		<div class="container" ng-controller="profilecontroller">
 			<h1>Links of {{loggedInUserName}}</h1>
+			<h3>${localStorage.totalcount}</h3>
             <div class="logout" style="text-align: center;">
       
                 <button class="btn btn-lg btn-primary" ng-click="logout()">logout</button>
               </div>
+			  <div class="newlink">
+
+
+				  <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#addLinkModal" >
+					  Add new link
+
+				  </button>
+
+			  </div>
+
+			
             
 			<div class="row">
 				<div class="col-12" ng-repeat="link in links">
@@ -31,7 +43,15 @@
 									<a href="{{link.url}}">{{link.linkTitle}}<i class="fa fa-external-link" aria-hidden="true"></i></a>
 
 								</div>
-								<div class="col-4">
+								<div class="col-2">
+									<h4>
+										{{link.clicks}}
+									</h4>
+
+
+
+								</div>
+								<div class="col-2">
 									<button ng-click="passLinkInfo(link._id, link.linkTitle, link.url)" class="btn btn-primary" data-toggle="modal" data-target="#updateLinkModal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
 									<button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
 								</div>
@@ -71,6 +91,47 @@
 			    </div>
 			  </div>
 			</div>
+
+			<div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <h5 class="modal-title" id="exampleModalLabel">Add New Link</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					  </button>
+					</div>
+					<div class="modal-body" style="margin: 5%;">
+						<form action="/uploadLinkImage" method="post" enctype="multipart/form-data">
+							<input type="file" id="file" />
+							<input type="submit" />
+						</form>
+			
+					  <form ng-submit="addLink()" enctype="multipart/form-data">
+
+
+						<div class="form-group">
+							<input type="file" name="" placeholder="LINK IMAGE" class="form-control" ng-model="addLink.linkimage"/>
+							<!-- <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="height:200px;width:200px" />	 -->
+						<div class="form-group" style="margin-top: 5%;">
+						  <input type="text" name="" placeholder="LINK TITLE"  class="form-control" ng-model="addLink.title">	
+						</div>
+						 
+						<div class="form-group" style="margin-top: 5%;">
+							<input type="text" name="" placeholder="LINK" class="form-control" ng-model="addLink.url">	
+						  </div>
+						<div class="form-group" style="margin-top: 5%;">
+						  <button class="btn btn-danger">Add Document</button>
+						</div>
+					  </form> 
+					  
+					</div>
+					<div class="modal-footer">
+					  <h5>Have a Nice Day</h5>          
+					</div>
+				  </div>
+				</div>
+			  </div>
 		</div>
 	</div>
 	
@@ -78,9 +139,41 @@
 
 	<script type="text/javascript" src="../vendor/app.js"></script>
 
+
+
+
+
+
 	<script type="text/javascript">
 
+		function getLinkValue(){
+		 return localStorage.getItem('totalcount');
+		}
+
+
+
+app.controller('profilecontroller', function ($scope) {
+
+
+		// function getLinkValue(){
+		// return localStorage.getItem('totalcount');
+		// }
+
+            $scope.SelectFile = function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $scope.PreviewImage = e.target.result;
+                    $scope.$apply();
+                };
+ 
+                reader.readAsDataURL(e.target.files[0]);
+            };
+        });
+
+
 		app.controller('profilecontroller', function($scope, $http){
+
+
 
 
 			$scope.updateLinkInfo = function(){
@@ -104,9 +197,19 @@
 
 			}
 
-			$scope.linkclicked= function(){
+
+			$scope.addLink= function(title, url){
+				$scope.addLink.uid = localStorage.getItem("id");
+
+				console.log($scope.addLink);
+
 				$http({
-					url
+					url:"<%= usefuls.url.apiUrl %>/addLink",
+					method:"POST",
+					data:$scope.addLink,
+					headers:{
+						"Content-type":"application/json"
+					}
 				})
 			}
 
@@ -115,6 +218,7 @@
 				console.log(id+" : "+title+" : "+url);
 
 				$scope.updatelink = {
+
 					lid:id,
 					linkTitle:title,
 					url:url
@@ -136,6 +240,13 @@
 				}).then(function(res){
 					console.log(res);
 					$scope.links = res.data[0].links;
+
+					var linkCount = 0;
+					res.data[0].links.forEach(link => {
+					linkCount += link.clicks;
+					
+				});
+				localStorage.setItem("totalcount", linkCount);
 				}, function(err){
 					console.log(err);
 				});

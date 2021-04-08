@@ -15,6 +15,7 @@ exports.api = function(app,port){
 	}));
 
 	app.use(bodyparser.json());
+	
 
 	mc.connect("mongodb://localhost:27017", function(err, dbs){
 
@@ -48,7 +49,7 @@ exports.api = function(app,port){
 
 		app.post("/uploadLinkImage", multipartMiddlewareLinkImage, function(req, res){
 
-			console.log(req.files);
+			console.log(req);
 			var fp = "linkimages"+req.files.linkimage.path.split("linkimages")[1];
 			res.json({linkimage:fp});
 
@@ -113,6 +114,8 @@ exports.api = function(app,port){
 			});
 
 		});
+
+	
 
 		app.get("/linkClicked/:uid/:lid", function(req, res){
 
@@ -215,6 +218,7 @@ exports.api = function(app,port){
 			col.find(
 				{_id:ObjectId(req.params.uid)}).project({"links":1}).toArray(function(err, docs){
 				res.json(docs);
+			
 			});
 
 		});
@@ -225,9 +229,19 @@ exports.api = function(app,port){
 			col.find(
 				{_id:ObjectId(req.params.uid)}).project({"links":0}).toArray(function(err, docs){
 				res.json(docs);
+				
 			});
 
 		});
+
+		// app.get("/getclicks/:uid/:lid", function(req,res){
+		// 	col.find({
+		// 		_id:ObjectId{req.params.uid}, 
+
+
+		// 	})
+
+		// })
 		
 
 	});

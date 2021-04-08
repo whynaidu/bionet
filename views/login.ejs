@@ -47,6 +47,7 @@
 			}).then(function successCallback(res){
 				localStorage.setItem("id", res.data[0]._id);
 				localStorage.setItem("uname", res.data[0].username);
+				localStorage.setItem("totalcount", 0)
 				location.reload();
 				// localStorage.clear();
 				// console.log(localStorage);
