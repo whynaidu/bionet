@@ -1,269 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+	<title>BioTree | Home</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+		integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	
+	<script type="text/javascript" src="../vendor/app.js"></script>
+	
+	<!-- controller files -->
+	<script type="text/javascript" src="../controller/profileController.js"></script>
+
+	<!-- css files -->
+	<link rel="stylesheet" href="../css/backgroundImage.css">
+	<link rel="stylesheet" href="../css/table.css">
 
 </head>
 <body>
-	<div ng-app="myapp">
-		<div class="container" ng-controller="profilecontroller">
-			<h1>Links of {{loggedInUserName}}</h1>
-			<h3>${localStorage.totalcount}</h3>
-            <div class="logout" style="text-align: center;">
-      
-                <button class="btn btn-lg btn-primary" ng-click="logout()">logout</button>
-              </div>
-			  <div class="newlink">
-
-
-				  <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#addLinkModal" >
-					  Add new link
-
-				  </button>
-
-			  </div>
-
-			
-            
-			<div class="row">
-				<div class="col-12" ng-repeat="link in links">
-					<div class="card">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-2">
-									<img style="height:50px;" src="{{link.linkImage}}" alt="img">
-								</div>
-								<div class="col-6" ng-click="linkclicked">
-									<a href="{{link.url}}">{{link.linkTitle}}<i class="fa fa-external-link" aria-hidden="true"></i></a>
-
-								</div>
-								<div class="col-2">
-									<h4>
-										{{link.clicks}}
-									</h4>
-
-
-
-								</div>
-								<div class="col-2">
-									<button ng-click="passLinkInfo(link._id, link.linkTitle, link.url)" class="btn btn-primary" data-toggle="modal" data-target="#updateLinkModal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-									<button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
-								</div>
-							</div>
+	<section class="intro">
+		<div class="bg-image h-100">
+			<div ng-app="myapp">
+				<div class="container" ng-controller="profilecontroller">
+					<div class="row py-5">
+						<div class="col-6">
+							<h2>Links of {{loggedInUserName}}</h2>
+						</div>
+						<div class="col-6 text-right">
+							<button class="btn btn-success" data-toggle="modal" data-target="#addLinkModal">Add new link</button>
+							<button class="btn btn-danger" type="button" ng-click="logout()">Logout</button>
 						</div>
 					</div>
+
+		  			<div class="mask d-flex">
+						<div class="container">
+			  				<div class="row justify-content-center">
+								<div class="col-12">
+				  					<div class="card mask-custom">
+										<div class="card-body">
+					  						<div class="table-responsive">
+						  						<div class="table-wrapper-scroll-y my-custom-scrollbar">
+													<table class="table table-borderless text-white mb-0">
+						  								<thead>
+															<tr>
+																<th scope="col">Link's image</th>
+																<th scope="col">Actual Link</th>
+																<th scope="col">Total view per link</th>
+																<th scope="col">Action</th>
+															</tr>
+						  								</thead>
+														<tbody>
+															<tr ng-repeat="link in links">
+																<td>
+																	<div class="col-2">
+																		<img style="height:50px;" src="{{link.linkImage}}" alt="img">
+																		<!-- onerror="this.src='../linkimages/img-icon.svg'" -->
+																	</div>
+																</td>
+																<td>{{link.url}}</td>
+																<td class="text-center">{{link.clicks}}</td>
+																<td>
+																	<button ng-click="passLinkInfo(link._id, link.linkTitle, link.url)" class="btn btn-primary" 
+																		data-toggle="modal" data-target="#updateLinkModal">
+																		<i class="fa fa-pencil" aria-hidden="true"></i>
+																	</button>
+																	<button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+					 						</div>
+										</div>
+				 					</div>
+								</div>
+			  				</div>
+						</div>
+		 			</div>
 				</div>
 			</div>
-
-			<div class="modal fade" id="updateLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h5 class="modal-title" id="exampleModalLabel">Update Link</h5>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			      </div>
-			      <div class="modal-body">
-
-			      	<form ng-submit="updateLinkInfo()">
-			      		<div class="form-group">
-			      			<input type="text" name=""   class="form-control" ng-model="updatelink.linkTitle">	
-			      		</div>
-						<div class="form-group">
-			      			<input type="text	" name=""  class="form-control" ng-model="updatelink.url">	
-			      		</div>
-			      		<div class="form-group">
-			      			<button class="btn btn-primary">Save changes</button>
-			      		</div>
-			      	</form>
-			        
-			      </div>
-			      <div class="modal-footer">
-			        
-			      </div>
-			    </div>
-			  </div>
-			</div>
-
-			<div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-				  <div class="modal-content">
-					<div class="modal-header">
-					  <h5 class="modal-title" id="exampleModalLabel">Add New Link</h5>
-					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					  </button>
-					</div>
-					<div class="modal-body" style="margin: 5%;">
-						<form action="/uploadLinkImage" method="post" enctype="multipart/form-data">
-							<input type="file" id="file" />
-							<input type="submit" />
-						</form>
-			
-					  <form ng-submit="addLink()" enctype="multipart/form-data">
-
-
-						<div class="form-group">
-							<input type="file" name="" placeholder="LINK IMAGE" class="form-control" ng-model="addLink.linkimage"/>
-							<!-- <img ng-src="{{PreviewImage}}" ng-show="PreviewImage != null" alt="" style="height:200px;width:200px" />	 -->
-						<div class="form-group" style="margin-top: 5%;">
-						  <input type="text" name="" placeholder="LINK TITLE"  class="form-control" ng-model="addLink.title">	
-						</div>
-						 
-						<div class="form-group" style="margin-top: 5%;">
-							<input type="text" name="" placeholder="LINK" class="form-control" ng-model="addLink.url">	
-						  </div>
-						<div class="form-group" style="margin-top: 5%;">
-						  <button class="btn btn-danger">Add Document</button>
-						</div>
-					  </form> 
-					  
-					</div>
-					<div class="modal-footer">
-					  <h5>Have a Nice Day</h5>          
-					</div>
-				  </div>
-				</div>
-			  </div>
 		</div>
-	</div>
-	
-	
+	</section>
 
-	<script type="text/javascript" src="../vendor/app.js"></script>
+	<%- include('./modal/addLink.ejs') %>
+	<%- include('./modal/updateLink.ejs') %>
 
-
-
-
-
-
-	<script type="text/javascript">
-
-		function getLinkValue(){
-		 return localStorage.getItem('totalcount');
-		}
-
-
-
-app.controller('profilecontroller', function ($scope) {
-
-
-		// function getLinkValue(){
-		// return localStorage.getItem('totalcount');
-		// }
-
-            $scope.SelectFile = function (e) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $scope.PreviewImage = e.target.result;
-                    $scope.$apply();
-                };
- 
-                reader.readAsDataURL(e.target.files[0]);
-            };
-        });
-
-
-		app.controller('profilecontroller', function($scope, $http){
-
-
-
-
-			$scope.updateLinkInfo = function(){
-
-				$scope.updatelink.uid = localStorage.getItem("id");
-				console.log($scope.updatelink);
-
-				$http({
-					url:"<%= usefuls.url.apiUrl %>/updateLinkInfo",
-					method:"POST",
-					data:$scope.updatelink,
-					headers:{
-						"Content-type":"application/json"
-					}
-
-				}).then(function(res){
-					console.log(res);
-				}, function(err){
-					console.log(err);
-				});
-
-			}
-
-
-			$scope.addLink= function(title, url){
-				$scope.addLink.uid = localStorage.getItem("id");
-
-				console.log($scope.addLink);
-
-				$http({
-					url:"<%= usefuls.url.apiUrl %>/addLink",
-					method:"POST",
-					data:$scope.addLink,
-					headers:{
-						"Content-type":"application/json"
-					}
-				})
-			}
-
-			$scope.passLinkInfo = function(id, title, url){
-
-				console.log(id+" : "+title+" : "+url);
-
-				$scope.updatelink = {
-
-					lid:id,
-					linkTitle:title,
-					url:url
-				};
-			
-						}
-			
-			if(localStorage.length==0){
-
-				window.location.href = "<%= usefuls.url.viewUrl %>/login";			
-
-			}
-			else{
-				$scope.loggedInUserName = localStorage.uname;
-				$scope.loggedInUserId = localStorage.id;
-				$http({
-					url:"http://localhost:8802/getuserLinks/"+$scope.loggedInUserId,
-					method:"GET"
-				}).then(function(res){
-					console.log(res);
-					$scope.links = res.data[0].links;
-
-					var linkCount = 0;
-					res.data[0].links.forEach(link => {
-					linkCount += link.clicks;
-					
-				});
-				localStorage.setItem("totalcount", linkCount);
-				}, function(err){
-					console.log(err);
-				});
-			}
-
-            $scope.logout = function() {
-            localStorage.clear();
-            location.reload();
-       
-      
-        }
-
-
-
-
-		});
-
-	</script>
 </body>
 </html>

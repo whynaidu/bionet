@@ -1,0 +1,9 @@
+body{
+	background-image: url('../linkimages/49234b113e267d0a4ec10324e5714e2d.png');
+	background-repeat: no-repeat;
+  	background-attachment: fixed;
+	/* Center and scale the image nicely */
+	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;
+}
